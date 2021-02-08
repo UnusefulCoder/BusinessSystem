@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang='PT-BR'>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+
+    <title>Login</title>
+
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <meta name='description' content='Sistema de Gerenciamento'>
+
+    <link rel='stylesheet' type='text/css' media='screen' href='css/main.css'>
+
+    <script src='js/login.js' defer></script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="snackbar">
+            <p></p>
+            <img src="imagem/fechar.png" alt="FECHAR" title="FECHAR" onclick="closeSnackbar();">
+        </div>
+    </div>
+    
+    <form id="formLogin" name="login" method="POST" onsubmit="return enviar('formLogin', ['usuario', 'senha']);" action="?pagina=login">
+        <header>ACESSAR O SISTEMA</header>
+
+        <label for='usuario'>Usuário</label>
+        <input type="text" autocomplete="nickname" name="usuario" id="usuario" autofocus required>
+        <p id='statusUsuario'>{STATUS_USUARIO}</p>
+
+        <label for='senha'>Senha</label>
+        <input type="password" autocomplete="current-password" name="senha" id="senha" required>
+        <p id='statusSenha'>{STATUS_SENHA}</p>
+
+        <input type="submit" id="enviar" value="LOGIN">
+    </form>
+</body>
+{SCRIPT}
+</html>

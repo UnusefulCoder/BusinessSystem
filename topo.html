@@ -1,0 +1,40 @@
+<div id='wrapper'>
+    <div id="snackbar">
+        <p></p>
+        <img src="imagem/fechar.png" alt="FECHAR" title="FECHAR" onclick="closeSnackbar();">
+    </div>
+</div>
+
+<div id='navbar'>
+    <a id='home' href='?pagina'>HOME</a>
+    <a id='perfil' href='?pagina=perfil'>PERFIL</a>
+    <a id='logs' href='?pagina=logs'>LOGS</a>
+    <div id='gerenciar-dropdown' class='dropdown'>
+        <a id='gerenciar' class='dropdown' href='?pagina=usuarios'>USUÁRIOS</a>
+        <div id='gerenciar-dropdown-content' class='dropdown-content'>
+            <a id='usuarios-mostrar' href='?pagina=usuarios'>LISTAR</a>
+            <a id='usuarios-incluir' href='?pagina=usuarios_incluir'>CRIAR</a>
+            <a id='usuarios-alterar' href='?pagina=usuarios_alterar'>EDITAR</a>
+            <a id='usuarios-remover' href='?pagina=usuarios_remover'>EXCLUIR</a>
+        </div>
+    </div>
+    <a id='logout' href='?pagina=logout'>LOGOUT</a>
+</div>
+
+<script>
+    function showSnackbar(message) {
+        var snackbar = document.getElementById("snackbar");
+
+        snackbar.children[0].innerText = message;
+        snackbar.className = "show";
+
+        setTimeout(() => closeSnackbar(), 15000);
+    }
+
+    function closeSnackbar() {
+        var snackbar = document.getElementById("snackbar");
+        
+        snackbar.removeAttribute("class");
+        snackbar.children[0].innerText = "";
+    }
+</script>

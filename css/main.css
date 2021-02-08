@@ -1,0 +1,446 @@
+
+* {
+    font-family: 'Consolas';
+}
+
+body {
+    margin: 0;
+    min-width: 490px;
+}
+
+a {
+    cursor: pointer;
+    color: rgb(0, 153, 255);
+    text-decoration: none;
+}
+
+a:hover,
+a.active {
+    color: rgb(170, 170, 170);
+}
+
+a.active {
+    cursor: not-allowed;
+}
+
+#navbar {
+    background: #000000;
+    overflow: hidden;
+}
+
+#navbar > a {
+    font-size: 14px;
+    padding: 10px;
+    text-align: center;
+}
+
+#navbar > a:not(#logout) {
+    float: left;
+    border-right: 1px solid gray;
+}
+
+#navbar > a#logout {
+    float: right;
+    border-left: 1px solid gray;
+}
+
+.dropdown {
+    overflow: hidden;
+    font-size: 14px;
+    padding: 10px 0px;
+    text-align: center;
+}
+
+.dropdown > a {
+    padding: 10px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    min-width: 100px;
+    text-align: center;
+    background: #000000;
+    z-index: 2;
+}
+
+.dropdown-content > a {
+    float: none;
+    display: block;
+    font-size: 14px;
+    padding: 10px;
+    border-top: 1px solid gray;
+}
+
+#gerenciar-dropdown {
+    float: left;
+    border-right: 1px solid gray;
+}
+
+#gerenciar-dropdown-content {
+    top: 37px;
+    float: left;
+}
+
+#usuarios-dropdown-content {
+    top: 0px;
+    left: 100px;
+    float: left;
+}
+
+#gerenciar-dropdown:hover #gerenciar-dropdown-content {
+    display: block;
+}
+
+#usuarios-dropdown:hover #usuarios-dropdown-content {
+    display: block;
+}
+
+#content {
+    margin: 5px;
+    font-size: 18px;
+    text-align: center;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+#wrapper {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+    
+#wrapper > #snackbar {
+    visibility: hidden;
+
+    position: fixed;
+
+    top: 20px;
+    border-radius: 2px;
+    padding: 16px;
+
+    background: rgb(82, 82, 82);
+    color: #FAFAFA;
+    text-align: center;
+    
+    z-index: 1;
+}
+
+#snackbar > p {
+    display: flex;
+    margin: 0px;
+    margin-right: 5px;
+    float: left;
+}
+
+#snackbar > img {
+    display: flex;
+    width: 16px;
+    height: 16px;
+    float: right;
+}
+
+#wrapper > #snackbar.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 14.5s;
+}
+
+@keyframes fadein {
+    from {top: -100%; opacity: 0;}
+    to {top: 20px; opacity: 1;}
+}
+
+@keyframes fadeout {
+    from {top: 20px; opacity: 1;}
+    to {top: -100%; opacity: 0;}
+}
+
+input[type="button"]:not(:disabled),
+input[type="submit"]:not(:disabled),
+input[type="checkbox"],
+#mSenhaLabel {
+    cursor: pointer;
+}
+
+input:disabled:not([type='text']) {
+    cursor: not-allowed;
+}
+
+input[type='text']:read-only:not(:disabled) {
+    background: rgb(207, 207, 207);
+    cursor: not-allowed;
+    user-select: none;
+}
+
+img {
+    width: 32px;
+    height: 32px;
+    margin: auto;
+    cursor: pointer;
+}
+
+@keyframes formBlink {
+    0% {background: rgb(192, 210, 243);}
+    40% {background: none;}
+    60% {background: rgb(192, 210, 243);}
+    100% {background: none;}
+}
+
+form.blink {
+    animation: formBlink 400ms;
+}
+
+form {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+form header {
+    margin-bottom: 10px;
+}
+
+form input[type="text"],
+form input[type="password"] {
+    height: 30px;
+    width: 90%;
+}
+
+form select {
+    height: 34px;
+    padding: 1px;
+    width: 274px;
+}
+
+form div {
+    display: flex;
+    flex-flow: row;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+form p {
+    margin: auto;
+    font-size: 12px;
+    width: max-content;
+}
+
+#formCriar,
+#formEditar,
+#formLogin {
+    min-width: 300px;
+    max-width: 300px;
+
+    margin: 60px auto 0px auto;
+    padding: 20px 10px;
+
+    border: 1px solid black;
+}
+
+#formLogin {
+    margin-top: 20vh;
+    text-align: center;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+input,
+select {
+    margin: auto;
+    font-size: inherit;
+    font-weight: inherit;
+    border: 1px solid black;
+}
+
+input:hover:not(:disabled),
+select:hover:not(:disabled) {
+    box-shadow: 0 0 2px 2px rgb(192, 210, 243);
+}
+
+select option {
+    background: white;
+}
+
+label:not(#mSenhaLabel) {
+    display: flex;
+    margin: 0px auto 0px 5%;
+    font-size: inherit;
+    font-weight: inherit;
+    margin-top: 10px;
+}
+
+form input[type="button"],
+form input[type="submit"] {
+    width: 80px;
+    height: 34px;
+}
+
+#mSenhaLabel {
+    margin-left: auto;
+    display: inline;
+    font-size: 12px;
+    font-weight: bold;
+    user-select: none;
+}
+
+form #mSenha {
+    margin-left: 4px;
+    margin-right: 4%;
+}
+
+form #criarEnviar, 
+form #editarEnviar {
+    margin: 10px auto 0px 4%;
+    float: left;
+}
+
+form #criarCancelar,
+form #editarCancelar {
+    margin: 10px 4% 0px auto;
+    float: right;
+}
+
+form #enviar {
+    margin: 30px auto 0px auto;
+}
+
+#criar {
+    padding: 15px;
+    font-size: 14px;
+    max-width: 600px;
+
+    width: 100%;
+}
+
+table {
+    border-collapse: collapse;
+    display: table;
+    text-indent: initial;
+    margin: auto;
+
+    max-width: 600px;
+
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: transparent;
+}
+
+table div {
+    display: inline;
+    cursor: pointer;
+}
+
+table tbody td, table tbody th {
+    padding: 8px;
+}
+
+table thead th {
+    padding: 13px;
+}
+
+table thead {
+    display: table-header-group;
+    vertical-align: middle;
+    border-color: inherit;
+    border-top: 1px solid #dee2e6;
+    border-bottom: 2px solid #dee2e6;
+}
+
+table tbody tr {
+    border-top: 1px solid #dee2e6;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+}
+
+table .deletar,
+table .editavel,
+table .alterar {
+    cursor: pointer;
+}
+
+table tbody tr:hover {
+    background: rgb(192, 210, 243);
+}
+
+.acoes {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+#pesquisar {
+    display: flex;
+    margin: 10px 0px;
+    width: 100%;
+    min-width: 480px;
+    max-width: 600px;
+}
+
+#pesquisar #pesquisa {
+    float: left;
+    margin-right: 10px;
+}
+
+#pesquisar #submit {
+    width: 120px;
+    float: right;
+}
+
+.paginador {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    min-width: 490px;
+    max-width: 600px;
+
+    width: 100%;
+}
+
+.paginador:not(input) {
+    cursor: default;
+}
+
+#pagina:disabled, 
+#maxpagina:disabled {
+    background: transparent;
+    color: inherit;
+}
+
+.paginador input:not(#pagina, #maxpagina) {
+    margin: 0 10px;
+    min-width: 85px;
+    height: 34px;
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+#pagina, #maxpagina {
+    min-width: 10px;
+    margin: 0;
+    height: 30px;
+    border: none;
+    outline: none;
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+#pagina {
+    text-align: right;
+}
+
+#maxpagina {
+    text-align: left;
+}
+
+#quantidade {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}

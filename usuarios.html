@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang='PT-BR'>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+
+    <title>{TITULO}</title>
+
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <meta name='description' content='Sistema de Gerenciamento'>
+
+    <link rel='stylesheet' type='text/css' media='screen' href='css/main.css'>
+</head>
+<body>
+    {TOPO}
+
+    <div id='content'>
+        <!-- BEGIN MOSTRAR -->
+        <script>
+            function tabelaPagina(pagina) {
+                location.href = '?pagina=usuarios&pg=' + pagina;
+            }
+            function remover(element) {
+                if(confirm('Tem certeza que deseja excluir o usuário ' + element.children[1].innerHTML + '?\n')) {
+                    location.href = '?pagina=usuarios_remover&id=' + element.children[0].innerHTML;
+                }
+            }
+        </script>
+
+        <input type="button" value="CRIAR USUÁRIO" id="criar" onclick="location.href = '?pagina=usuarios_incluir'">
+
+        <form id='pesquisar' action='?pagina=usuarios_pesquisar' method='POST'>
+            <input type='text' name='pesquisa' id='pesquisa' autofocus>
+
+            <input type='submit' value='PESQUISAR' name='submit' id='submit'>
+        </form>
+        
+        <div id="quantidade">QUANTIDADE DE USUÁRIOS: {USUARIOS}</div>
+
+        <!-- BEGIN TABELA -->
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Usuário</th>
+                    <th>Nome</th>
+                    <th>Privilégio</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- BEGIN TABELA_LINHA -->
+                <tr>
+                    <th onclick="location.href='?pagina=usuarios_alterar&id=' + this.innerHTML">{ID}</th>
+                    <td onclick="location.href='?pagina=usuarios_alterar&id=' + this.parentNode.children[0].innerHTML">{USUARIO}</td>
+                    <td onclick="location.href='?pagina=usuarios_alterar&id=' + this.parentNode.children[0].innerHTML">{NOME}</td>
+                    <td onclick="location.href='?pagina=usuarios_alterar&id=' + this.parentNode.children[0].innerHTML">{PRIVILEGIO}</td>
+                    <th class='acoes'>
+                        <img src='imagem/editar.png' alt='EDITAR' title='EDITAR' onclick="location.href='?pagina=usuarios_alterar&id=' + this.parentNode.parentNode.children[0].innerHTML" loading='lazy'>
+                        <img src='imagem/excluir.png' alt='EXCLUIR' title='EXCLUIR' onclick='remover(this.parentNode.parentNode)' loading='lazy'>
+                    </th>
+                </tr>
+                <!-- END TABELA_LINHA -->
+                <tr>
+                    <th colspan='5'>NENHUM RESULTADO ENCONTRADO</th>
+                </tr>
+                <!-- FINALLY TABELA_LINHA -->
+            </tbody>
+        </table>
+        <!-- END TABELA -->
+        
+        <div class='paginador'>
+            <input type="button" value="PRIMEIRA" onclick="tabelaPagina(1)" {DES_1}>
+            <input type="button" value="ANTERIOR" onclick="tabelaPagina(document.getElementById('pagina').value - 1)" {DES_1}>
+            <input type="text" value="{PAGINA}" onkeypress="if(event.key == 'Enter') tabelaPagina(document.getElementById('pagina').value)" id='pagina' {DES_2}>/
+            <input type="text" value="{MAXPAGINA}" id='maxpagina' disabled>
+            <input type="button" value="PRÓXIMA" onclick="tabelaPagina(parseInt(document.getElementById('pagina').value) + 1)" {DES_3}>
+            <input type="button" value="ÚLTIMA" onclick="tabelaPagina(document.getElementById('maxpagina').value)" {DES_3}>
+        </div>
+        <!-- END MOSTRAR -->
+
+        <!-- BEGIN INCLUIR_ALTERAR -->
+        <script>
+            function enviar(form, inputs) {
+                if(inputs.some(input => document.getElementById(input).value == '')) {
+                    form = document.getElementById(form);
+
+                    form.classList.add('blink');
+                    
+                    setTimeout(() => form.removeAttribute("class"), 400);
+
+                    inputs.forEach(input => document.getElementById(input).onblur());
+
+                    return false;
+                }
+
+                return true;
+            }
+            function blur(inputID, statusID, string) {
+                var input = document.getElementById(inputID);
+                var status = document.getElementById(statusID);
+
+                if(input != null) {
+                    input.onfocus = () => status.innerHTML = '';
+                    input.onblur = () => status.innerHTML = input.value == '' ? string : '';
+                }
+            }
+            function mostrarSenha(nome) {
+                var input = document.getElementById(nome);
+
+                input.type = input.type == 'text' ? 'password' : 'text';
+            }
+        </script>
+        <!-- BEGIN INCLUIR -->
+        <form id='formCriar' action='?pagina=usuarios_incluir' method="POST" onsubmit="return enviar('formCriar', ['criarUsuario', 'criarNome', 'criarSenha']);">
+            <header>NOVO USUÁRIO</header>
+        
+            <label for='criarUsuario'>Usuário</label>
+            <input type="text" autocomplete="nickname" name="criarUsuario" id="criarUsuario" pattern="[a-zA-ZáàãâäéèêëíìîïóòôöúùûüñýÿçÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜÑÇ]{1,30}" title="Nome de usuário deve conter somente caracteres alfabéticos (com ou sem acento)" autofocus required {VALUE_USUARIO}>
+            <p id='statusUsuario'>{STATUS_USUARIO}</p>
+            
+            <label for='criarNome'>Nome</label>
+            <input type="text" autocomplete="given-name" name="criarNome" id="criarNome" pattern="[a-zA-ZáàãâäéèêëíìîïóòôöúùûüñýÿçÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜÑÇ ]{1,100}" title="Nome deve conter somente caracteres alfabéticos (com ou sem acento)" required {VALUE_NOME}>
+            <p id='statusNome'>{STATUS_NOME}</p>
+            
+            <label for='criarPrivilegio'>Privilégio</label>
+            <select name="criarPrivilegio" id="criarPrivilegio" required>
+                <option value="0" {PRIVILEGIO_0}>Usuário Comum</option>
+                <option value="1" {PRIVILEGIO_1}>Usuário Nível 1</option>
+                <option value="2" {PRIVILEGIO_2}>Usuário Nível 2</option>
+                <option value="3" {PRIVILEGIO_3}>Administrador</option>
+            </select>
+            
+            <label for='criarSenha'>Senha</label>
+            <input type="password" autocomplete="new-password" name="criarSenha" id="criarSenha" pattern="[a-zA-Z0-9!@#$%&*,.:;-_+=?]{8,}" title="Senha deve conter no mínimo 8 caracteres entre letras, digitos e caracteres especiais" required {VALUE_SENHA}>
+            <p id='statusSenha'>{STATUS_SENHA}</p>
+        
+            <div>
+                <label id="mSenhaLabel" for="mSenha">MOSTRAR SENHA</label>
+                <input type="checkbox" name="mSenha" id="mSenha" onclick="mostrarSenha('criarSenha')">
+            </div>
+        
+            <input type="submit" value="CRIAR" id="criarEnviar">
+            <input type="button" value="VOLTAR" id="criarCancelar" onclick="location.href='?pagina=usuarios'">
+        </form>
+
+        <script>
+            blur('criarUsuario', 'statusUsuario', 'Preencha o usuário');
+            blur('criarNome', 'statusNome', 'Preencha o nome');
+            blur('criarSenha', 'statusSenha', 'Preencha a senha');
+        </script>
+        <!-- END INCLUIR -->
+
+        <!-- BEGIN ALTERAR -->
+        <form id='formEditar' action='?pagina=usuarios_alterar&id={ID}' method="POST" onsubmit="return enviar('formEditar', ['editarNome']);">
+            <header>EDITAR USUÁRIO</header>
+        
+            <label for='editarID'>ID</label>
+            <input type="text" name="editarID" id="editarID" value="{ID}" readonly>
+        
+            <label for='editarUsuario'>Usuário</label>
+            <input type="text" name="editarUsuario" id="editarUsuario" value="{USUARIO}" readonly>
+            
+            <label for='editarNome'>Nome</label>
+            <input type="text" autocomplete="given-name" name="editarNome" id="editarNome" value="{NOME}" pattern="[a-zA-ZáàãâäéèêëíìîïóòôöúùûüñýÿçÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜÑÇ ]{1,100}" title="Nome deve conter somente caracteres alfabéticos (com ou sem acento)" autofocus>
+            <p id='statusNome'>{STATUS_NOME}</p>
+            
+            <label for='editarPrivilegio'>Privilégio</label>
+            <select name="editarPrivilegio" id="editarPrivilegio">
+                <option value="0" {PRIVILEGIO_0}>Usuário Comum</option>
+                <option value="1" {PRIVILEGIO_1}>Usuário Nível 1</option>
+                <option value="2" {PRIVILEGIO_2}>Usuário Nível 2</option>
+                <option value="3" {PRIVILEGIO_3}>Administrador</option>
+            </select>
+        
+            <label for='editarSenha'>Nova Senha</label>
+            <input type="password" autocomplete="new-password" name="editarSenha" id="editarSenha" {VALUE_SENHA} pattern="[a-zA-Z0-9!@#$%&*,.:;-_+=?]{8,}" title="Senha deve conter no mínimo 8 caracteres entre letras, digitos e caracteres especiais">
+            <p id='statusSenha'>{STATUS_SENHA}</p>
+        
+            <div>
+                <label id="mSenhaLabel" for="mSenha">MOSTRAR SENHA</label>
+                <input type="checkbox" name="mSenha" id="mSenha" onclick="mostrarSenha('editarSenha')">
+            </div>
+        
+            <input type="submit" value="EDITAR" id="editarEnviar">
+            <input type="button" value="VOLTAR" id="editarCancelar" onclick="location.href='?pagina=usuarios'">
+        </form>
+
+        <script>
+            blur('editarNome', 'statusNome', 'Preencha o nome');
+            blur('editarSenha', 'statusSenha', '');
+        </script>
+        <!-- END ALTERAR -->
+        <!-- END INCLUIR_ALTERAR -->
+    </div>
+</body>
+{ELEMENTO}
+{SCRIPT}
+</html>

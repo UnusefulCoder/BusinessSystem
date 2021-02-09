@@ -11,7 +11,7 @@ session_start([
 if (!Session::has("id")) {
     if (Get::get('pagina') != 'login') {
         header('Location: ?pagina=login');
-        exit;
+        return;
     }
 
     try {
@@ -29,13 +29,13 @@ if (!Session::has("id")) {
         } else {
             $tpl = new \raelgc\view\Template('login.html');
             $tpl->show();
-            exit;
+            return;
         }
     } catch (InvalidArgumentException | mysqli_sql_exception $e) {
         $tpl = new \raelgc\view\Template('login.html');
         $tpl->SCRIPT = '<script>setTimeout(() => showSnackbar("' . $e->getMessage() . '"), 1);</script>';
         $tpl->show();
-        exit;
+        return;
     }
 }
 

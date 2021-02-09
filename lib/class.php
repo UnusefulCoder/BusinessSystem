@@ -2,8 +2,10 @@
 
 include 'lib/Template.php';
 
-abstract class Server
+final class Server
 {
+    private function __construct() { }
+
     static function has($key)
     {
         return isset($_SERVER[$key]);
@@ -11,7 +13,7 @@ abstract class Server
     
     static function get($key)
     {
-        return (Session::has($key) ? $_SERVER[$key] : null);
+        return (isset($_SERVER[$key]) ? $_SERVER[$key] : null);
     }
 
     static function set($key, $value)
@@ -24,8 +26,10 @@ abstract class Server
         unset($_SERVER[$key]);
     }
 }
-abstract class Session
+final class Session
 {
+    private function __construct() { }
+
     static function has($key)
     {
         return isset($_SESSION[$key]);
@@ -33,7 +37,7 @@ abstract class Session
     
     static function get($key)
     {
-        return (Session::has($key) ? $_SESSION[$key] : null);
+        return (isset($_SESSION[$key]) ? $_SESSION[$key] : null);
     }
 
     static function set($key, $value)
@@ -46,8 +50,10 @@ abstract class Session
         unset($_SESSION[$key]);
     }
 }
-abstract class Get
+final class Get
 {
+    private function __construct() { }
+
     static function has($key)
     {
         return isset($_GET[$key]);
@@ -55,7 +61,7 @@ abstract class Get
     
     static function get($key)
     {
-        return (Get::has($key) ? stripslashes($_GET[$key]) : null);
+        return (isset($_GET[$key]) ? strip_tags($_GET[$key]) : null);
     }
 
     static function set($key, $value)
@@ -68,8 +74,10 @@ abstract class Get
         unset($_GET[$key]);
     }
 }
-abstract class Post
+final class Post
 {
+    private function __construct() { }
+
     static function has($key)
     {
         return isset($_POST[$key]);
@@ -78,7 +86,7 @@ abstract class Post
     static function hasAll($keys)
     {
         foreach ($keys as $key) {
-            if (!Post::has($key)) return false;
+            if (!isset($_POST[$key])) return false;
         }
 
         return true;
@@ -86,7 +94,7 @@ abstract class Post
     
     static function get($key)
     {
-        return (Post::has($key) ? stripslashes($_POST[$key]) : null);
+        return (isset($_POST[$key]) ? strip_tags($_POST[$key]) : null);
     }
 
     static function set($key, $value)
@@ -225,7 +233,7 @@ class Usuarios extends Conexao
                 if ($this->queryUsuario('INSERT', $this->validar('usuario', Post::get('criarUsuario')) . ', ' . $this->validar('nome', Post::get('criarNome')) . ', ' . $this->validar('inteiro', Post::get('criarPrivilegio'), 0, 3) . ', PASSWORD(' . $this->validar('senha', Post::get('criarSenha')) . ')')) {
                     Session::set('status', 'Sucesso!');
                     header('Location: ?pagina=usuarios');
-                    exit;
+                    return;
                 }
             }
         } catch (InvalidArgumentException | mysqli_sql_exception $e) {
@@ -251,13 +259,13 @@ class Usuarios extends Conexao
         if (!Get::has('id')) {
             Session::set('status', 'Escolha o usuário para editar!');
             header('Location: ?pagina=usuarios');
-            exit;
+            return;
         }
 
         if (!$this->queryUsuario('SELECT', 'id=' . $this->escape(Get::get('id')))) {
             Session::set('status', 'Usuário não encontrado!');
             header('Location: ?pagina=usuarios');
-            exit;
+            return;
         }
 
         $resultado = $this->resultado->fetch_assoc();
@@ -274,7 +282,7 @@ class Usuarios extends Conexao
                 if (!$this->queryUsuario('SELECT', 'id=' . $this->escape(Post::get('editarID')))) {
                     Session::set('status', 'Usuário não encontrado!');
                     header('Location: ?pagina=usuarios');
-                    exit;
+                    return;
                 }
 
                 $resultado = $this->resultado->fetch_assoc();
@@ -290,7 +298,7 @@ class Usuarios extends Conexao
                 if ($this->queryUsuario('UPDATE', 'id=' . $this->escape(Post::get('editarID')), substr($query, 0, -2))) {
                     Session::set('status', 'Sucesso!');
                     header('Location: ?pagina=usuarios');
-                    exit;
+                    return;
                 }
             }
         } catch (InvalidArgumentException | mysqli_sql_exception $e) {
@@ -320,14 +328,13 @@ class Usuarios extends Conexao
         }
 
         header('Location: ?pagina=usuarios');
-        exit;
     }
 
     function pesquisar()
     {
         if (!Post::has('pesquisa') || Post::get('pesquisa') == '') {
             header('Location: ?pagina=usuarios');
-            exit;
+            return;
         }
 
         if (is_int(Post::get('pesquisa'))) $resultado = $this->queryUsuario('SELECT', 'id=' . $this->escape(Post::get('pesquisa')));

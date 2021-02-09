@@ -61,7 +61,7 @@ final class Get
     
     static function get($key)
     {
-        return (isset($_GET[$key]) ? strip_tags($_GET[$key]) : null);
+        return (isset($_GET[$key]) ? $_GET[$key] : null);
     }
 
     static function set($key, $value)
@@ -94,7 +94,7 @@ final class Post
     
     static function get($key)
     {
-        return (isset($_POST[$key]) ? strip_tags($_POST[$key]) : null);
+        return (isset($_POST[$key]) ? $_POST[$key] : null);
     }
 
     static function set($key, $value)

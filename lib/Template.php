@@ -543,7 +543,7 @@ namespace raelgc\view {
 		 */
 		public function show()
 		{
-			echo $this->parse();
+			echo htmlspecialchars($this->parse());
 		}
 	}
 }

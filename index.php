@@ -1,6 +1,6 @@
 <?php
 
-include_once('lib/class.php');
+require 'lib/class.php';
 
 session_start([
     'cookie_secure' => 'true',

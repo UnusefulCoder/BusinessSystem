@@ -14,6 +14,24 @@
     <script src='js/login.js' defer></script>
 </head>
 <body>
+    <script>
+        function showSnackbar(message) {
+            var snackbar = document.getElementById("snackbar");
+
+            snackbar.children[0].innerText = message;
+            snackbar.className = "show";
+
+            setTimeout(() => closeSnackbar(), 15000);
+        }
+
+        function closeSnackbar() {
+            var snackbar = document.getElementById("snackbar");
+            
+            snackbar.removeAttribute("class");
+            snackbar.children[0].innerText = "";
+        }
+    </script>
+    
     <div id="wrapper">
         <div id="snackbar">
             <p></p>
@@ -21,16 +39,12 @@
         </div>
     </div>
     
-    <form id="formLogin" name="login" method="POST" onsubmit="return enviar('formLogin', ['usuario', 'senha']);" action="?pagina=login">
+    <form id="formLogin" name="login" method="POST" action="?pagina=login">
         <header>ACESSAR O SISTEMA</header>
 
-        <label for='usuario'>Usuário</label>
-        <input type="text" autocomplete="nickname" name="usuario" id="usuario" autofocus required>
-        <p id='statusUsuario'>{STATUS_USUARIO}</p>
+        <input type="text" autocomplete="nickname" name="usuario" id="usuario" aria-label="Usuário" placeholder="Usuário" autofocus required>
 
-        <label for='senha'>Senha</label>
-        <input type="password" autocomplete="current-password" name="senha" id="senha" required>
-        <p id='statusSenha'>{STATUS_SENHA}</p>
+        <input type="password" autocomplete="current-password" name="senha" id="senha" aria-label="Senha" placeholder="Senha" required>
 
         <input type="submit" id="enviar" value="LOGIN">
     </form>

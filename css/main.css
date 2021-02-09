@@ -1,45 +1,52 @@
 
-* {
-    font-family: 'Consolas';
-}
-
 body {
     margin: 0;
     min-width: 490px;
+    text-align: center;
+    font: normal 18px 'Consolas';
+}
+
+a, img, input:where(
+    [type='button'], 
+    [type='submit'], 
+    [type='checkbox']
+), #mSenhaLabel, table tbody tr {
+    cursor: pointer;
 }
 
 a {
-    cursor: pointer;
     color: rgb(0, 153, 255);
     text-decoration: none;
 }
 
-a:hover,
-a.active {
+a:where(:hover, :active, .active) {
     color: rgb(170, 170, 170);
 }
 
-a.active {
+a.active,
+input:where(
+    :disabled:not([type='text']),
+    [type='text']:read-only
+) {
     cursor: not-allowed;
 }
 
-#navbar {
+nav {
     background: #000000;
     overflow: hidden;
 }
 
-#navbar > a {
+nav > a {
     font-size: 14px;
     padding: 10px;
-    text-align: center;
 }
 
-#navbar > a:not(#logout) {
+nav > a:not(#logout) {
     float: left;
     border-right: 1px solid gray;
 }
 
-#navbar > a#logout {
+nav > a#logout {
     float: right;
     border-left: 1px solid gray;
 }
@@ -48,7 +55,6 @@ a.active {
     overflow: hidden;
     font-size: 14px;
     padding: 10px 0px;
-    text-align: center;
 }
 
 .dropdown > a {
@@ -59,9 +65,7 @@ a.active {
     display: none;
     position: absolute;
     min-width: 100px;
-    text-align: center;
     background: #000000;
-    z-index: 2;
 }
 
 .dropdown-content > a {
@@ -82,24 +86,12 @@ a.active {
     float: left;
 }
 
-#usuarios-dropdown-content {
-    top: 0px;
-    left: 100px;
-    float: left;
-}
-
 #gerenciar-dropdown:hover #gerenciar-dropdown-content {
     display: block;
 }
 
-#usuarios-dropdown:hover #usuarios-dropdown-content {
-    display: block;
-}
-
-#content {
+main {
     margin: 5px;
-    font-size: 18px;
-    text-align: center;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
@@ -122,7 +114,6 @@ a.active {
 
     background: rgb(82, 82, 82);
     color: #FAFAFA;
-    text-align: center;
     
     z-index: 1;
 }
@@ -139,6 +130,7 @@ a.active {
     width: 16px;
     height: 16px;
     float: right;
+    margin: 3px auto;
 }
 
 #wrapper > #snackbar.show {
@@ -156,20 +148,16 @@ a.active {
     to {top: -100%; opacity: 0;}
 }
 
-input[type="button"]:not(:disabled),
-input[type="submit"]:not(:disabled),
-input[type="checkbox"],
-#mSenhaLabel {
-    cursor: pointer;
+input {
+    outline: none;
 }
 
-input:disabled:not([type='text']) {
-    cursor: not-allowed;
+input:invalid {
+    box-shadow: 0 0 2px 2px rgb(245, 154, 154);
 }
 
-input[type='text']:read-only:not(:disabled) {
+input[type='text']:read-only {
     background: rgb(207, 207, 207);
-    cursor: not-allowed;
     user-select: none;
 }
 
@@ -177,7 +165,6 @@ img {
     width: 32px;
     height: 32px;
     margin: auto;
-    cursor: pointer;
 }
 
 @keyframes formBlink {
@@ -192,7 +179,6 @@ form.blink {
 }
 
 form {
-    font-size: 18px;
     font-weight: bold;
 }
 
@@ -200,8 +186,10 @@ form header {
     margin-bottom: 10px;
 }
 
-form input[type="text"],
-form input[type="password"] {
+form input:where(
+    [type="text"],
+    [type="password"]
+) {
     height: 30px;
     width: 90%;
 }
@@ -225,9 +213,7 @@ form p {
     width: max-content;
 }
 
-#formCriar,
-#formEditar,
-#formLogin {
+#formCriar, #formEditar, #formLogin {
     min-width: 300px;
     max-width: 300px;
 
@@ -239,39 +225,41 @@ form p {
 
 #formLogin {
     margin-top: 20vh;
-    text-align: center;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
 }
 
-input,
-select {
+#formLogin input:where([type=text], [type=password]) {
+    margin: 10px auto;
+}
+
+#formLogin #enviar {
+    margin: 20px auto 0px auto;
+}
+
+input, select {
+    font: inherit;
     margin: auto;
-    font-size: inherit;
-    font-weight: inherit;
     border: 1px solid black;
 }
 
-input:hover:not(:disabled),
-select:hover:not(:disabled) {
+:where(input, select):hover:not(:disabled) {
     box-shadow: 0 0 2px 2px rgb(192, 210, 243);
 }
 
 select option {
+    font: inherit;
     background: white;
 }
 
 label:not(#mSenhaLabel) {
     display: flex;
     margin: 0px auto 0px 5%;
-    font-size: inherit;
-    font-weight: inherit;
     margin-top: 10px;
 }
 
-form input[type="button"],
-form input[type="submit"] {
+form input:where([type="button"], [type="submit"]) {
     width: 80px;
     height: 34px;
 }
@@ -289,20 +277,14 @@ form #mSenha {
     margin-right: 4%;
 }
 
-form #criarEnviar, 
-form #editarEnviar {
+form :where(#criarEnviar, #editarEnviar) {
     margin: 10px auto 0px 4%;
     float: left;
 }
 
-form #criarCancelar,
-form #editarCancelar {
+form :where(#criarCancelar, #editarCancelar) {
     margin: 10px 4% 0px auto;
     float: right;
-}
-
-form #enviar {
-    margin: 30px auto 0px auto;
 }
 
 #criar {
@@ -327,12 +309,7 @@ table {
     background-color: transparent;
 }
 
-table div {
-    display: inline;
-    cursor: pointer;
-}
-
-table tbody td, table tbody th {
+table tbody :where(td, th) {
     padding: 8px;
 }
 
@@ -351,14 +328,6 @@ table thead {
 table tbody tr {
     border-top: 1px solid #dee2e6;
     font-size: 14px;
-    text-align: center;
-    cursor: pointer;
-}
-
-table .deletar,
-table .editavel,
-table .alterar {
-    cursor: pointer;
 }
 
 table tbody tr:hover {
@@ -391,7 +360,6 @@ table tbody tr:hover {
 .paginador {
     display: flex;
     flex-direction: row;
-    text-align: center;
     align-items: center;
 
     font-size: 14px;
@@ -407,8 +375,7 @@ table tbody tr:hover {
     cursor: default;
 }
 
-#pagina:disabled, 
-#maxpagina:disabled {
+:where(#pagina, #maxpagina):disabled {
     background: transparent;
     color: inherit;
 }
@@ -417,8 +384,7 @@ table tbody tr:hover {
     margin: 0 10px;
     min-width: 85px;
     height: 34px;
-    font-size: inherit;
-    font-weight: inherit;
+    font: inherit;
 }
 
 #pagina, #maxpagina {
@@ -427,8 +393,7 @@ table tbody tr:hover {
     height: 30px;
     border: none;
     outline: none;
-    font-size: inherit;
-    font-weight: inherit;
+    font: inherit;
 }
 
 #pagina {
@@ -442,5 +407,4 @@ table tbody tr:hover {
 #quantidade {
     font-size: 16px;
     font-weight: bold;
-    margin-bottom: 10px;
 }

@@ -95,7 +95,7 @@ class Usuarios extends Conexao
         $tpl->addFile('TOPO', 'topo.html');
 
         $tpl->TITULO = 'Gerenciar Usuários';
-        $tpl->ELEMENTO = "<script defer>document.getElementById('gerenciar').classList.add('active');document.getElementById('usuarios-mostrar').classList.add('active');</script>";
+        $tpl->ELEMENTO = "<script>document.getElementById('gerenciar').classList.add('active'); document.getElementById('usuarios-mostrar').classList.add('active');</script>";
 
         $tpl->USUARIOS = $usuariosQuant;
         $tpl->MAXPAGINA = $maxPagina;
@@ -120,7 +120,7 @@ class Usuarios extends Conexao
         $tpl->block('TABELA');
 
         if (isset($_SESSION['status'])) {
-            $tpl->SCRIPT = '<script defer>setTimeout(() => showSnackbar("' . $_SESSION["status"] . '"), 1);</script>';
+            $tpl->SCRIPT = '<script>setTimeout(() => showSnackbar("' . $_SESSION["status"] . '"), 1);</script>';
 
             unset($_SESSION['status']);
         }

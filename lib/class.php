@@ -111,7 +111,10 @@ final class Post
 abstract class Conexao
 {
     public mysqli $conexao;
-    public mysqli_result | bool $resultado;
+    /**
+     * @var mysqli_result|bool
+     */
+    public $resultado;
 
     public function escape(string $value): string
     {

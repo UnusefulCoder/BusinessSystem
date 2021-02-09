@@ -1,6 +1,6 @@
 <?php
 
-require 'lib/Template.php';
+include 'lib/Template.php';
 
 abstract class Conexao
 {

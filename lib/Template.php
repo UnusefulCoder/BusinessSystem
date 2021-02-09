@@ -332,7 +332,7 @@ namespace raelgc\view {
 			$this->setValue($name, '');
 			$this->setValue($block, $matches[1]);
 			$this->setValue($parent, preg_replace($reg, "{" . $name . "}", $str));
-			if (isset($m[3])) $this->finally[$block] = $m[3];
+			if (isset($matches[3])) $this->finally[$block] = $matches[3];
 		}
 
 		/**
@@ -453,6 +453,7 @@ namespace raelgc\view {
 								throw new \BadMethodCallException("no accessor method in class " . $class . " for " . $className . "->" . $property[$i]);
 							}
 						}
+						$pointer_str = $pointer;
 						// Checking if final value is an object...
 						if (is_object($pointer)) {
 							$pointer_str = method_exists($pointer, "__toString") ? $pointer->__toString() : json_encode($pointer);
@@ -464,8 +465,6 @@ namespace raelgc\view {
 								if ($i < count($pointer) - 1) $value .= ",";
 							}
 							$pointer_str = $value;
-						} else {
-							$pointer_str = $pointer;
 						}
 						// Replacing value
 						$string = str_replace("{" . $var . $properties . "}", $pointer_str, $string);

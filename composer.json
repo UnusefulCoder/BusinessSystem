@@ -1,0 +1,17 @@
+{
+    "name": "uncoder/business-system",
+    "description": "Enterprise Business System",
+
+    "version": "0.0.1",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://github.com/UnusefulCoder/BusinessSystem"
+        }
+    ],
+
+    "require": {
+        "php": ">=8.0.0",
+        "dompdf/dompdf": ">=1.0.2"
+    }
+}

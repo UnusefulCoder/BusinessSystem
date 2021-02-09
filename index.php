@@ -1,6 +1,7 @@
 <?php
 
-include_once('lib/class.php');
+require 'vendor/autoload.php';
+include 'lib/class.php';
 
 session_start([
     'cookie_secure' => 'true',
@@ -15,10 +16,8 @@ if (!isset($_SESSION["id"])) {
     }
 
     try {
-        if (isset($_POST['usuario']) && isset($_POST['senha'])) {
-            $usuarios = new Usuarios();
-
-            if ($usuarios->queryUsuario('SELECT', 'usuario=' . $usuarios->escape($_POST['usuario']) . ' AND senha=PASSWORD(' . $usuarios->escape($_POST['senha']) . ')')) {
+        if (Post::has('usuario') && Post::has('senha')) {
+            if (Usuarios::queryUsuario('SELECT', 'usuario=' . Usuarios::escape(Post::get('usuario')) . ' AND senha=PASSWORD(' . Usuarios::escape(Post::get('senha')) . ')')) {
                 $resultado = $usuarios->resultado->fetch_assoc();
 
                 $_SESSION["id"] = $resultado["id"];
@@ -41,24 +40,19 @@ if (!isset($_SESSION["id"])) {
 
 if (isset($_GET['pagina'])) switch ($_GET['pagina']) {
     case 'usuarios':
-        $usuarios = new Usuarios();
-        $usuarios->mostrar();
+        Usuarios::mostrar();
         break;
     case 'usuarios_incluir':
-        $usuarios = new Usuarios();
-        $usuarios->incluir();
+        Usuarios::incluir();
         break;
     case 'usuarios_alterar':
-        $usuarios = new Usuarios();
-        $usuarios->alterar();
+        Usuarios::alterar();
         break;
     case 'usuarios_remover':
-        $usuarios = new Usuarios();
-        $usuarios->remover();
+        Usuarios::remover();
         break;
     case 'usuarios_pesquisar':
-        $usuarios = new Usuarios();
-        $usuarios->pesquisar();
+        Usuarios::pesquisar();
         break;
     case 'logout':
         session_regenerate_id(true);

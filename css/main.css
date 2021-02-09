@@ -7,8 +7,8 @@ body {
 }
 
 a, img, input:where(
-    [type='button'], 
-    [type='submit'], 
+    [type='button'],
+    [type='submit'],
     [type='checkbox']
 ), #mSenhaLabel, table tbody tr {
     cursor: pointer;
@@ -54,7 +54,7 @@ nav > a#logout {
 .dropdown {
     overflow: hidden;
     font-size: 14px;
-    padding: 10px 0px;
+    padding: 10px 0;
 }
 
 .dropdown > a {
@@ -120,7 +120,7 @@ main {
 
 #snackbar > p {
     display: flex;
-    margin: 0px;
+    margin: 0;
     margin-right: 5px;
     float: left;
 }
@@ -217,7 +217,7 @@ form p {
     min-width: 300px;
     max-width: 300px;
 
-    margin: 60px auto 0px auto;
+    margin: 60px auto 0;
     padding: 20px 10px;
 
     border: 1px solid black;
@@ -235,7 +235,7 @@ form p {
 }
 
 #formLogin #enviar {
-    margin: 20px auto 0px auto;
+    margin: 20px auto 0;
 }
 
 input, select {
@@ -255,7 +255,7 @@ select option {
 
 label:not(#mSenhaLabel) {
     display: flex;
-    margin: 0px auto 0px 5%;
+    margin: 0 auto 0 5%;
     margin-top: 10px;
 }
 
@@ -278,12 +278,12 @@ form #mSenha {
 }
 
 form :where(#criarEnviar, #editarEnviar) {
-    margin: 10px auto 0px 4%;
+    margin: 10px auto 0 4%;
     float: left;
 }
 
 form :where(#criarCancelar, #editarCancelar) {
-    margin: 10px 4% 0px auto;
+    margin: 10px 4% 0 auto;
     float: right;
 }
 
@@ -341,7 +341,7 @@ table tbody tr:hover {
 
 #pesquisar {
     display: flex;
-    margin: 10px 0px;
+    margin: 10px 0;
     width: 100%;
     min-width: 480px;
     max-width: 600px;

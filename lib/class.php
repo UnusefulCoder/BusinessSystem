@@ -150,7 +150,7 @@ abstract class Conexao
         if ($tipo == 'senha') $pattern = '/[a-zA-Z0-9!@#$%&*,.:;-_+=?]{8,}/';
         if ($tipo == 'inteiro') {
             if ($min && $max) {
-                if (intval($valor) >= $min && intval($valor) <= $max) $pattern = '/[[:digit:]]/';
+                if ((int)$valor >= $min && (int)$valor <= $max) $pattern = '/[[:digit:]]/';
             } else $pattern = '/[[:digit:]]/';
         }
 
@@ -171,17 +171,17 @@ function mostrarHome()
 {
     $tpl = new \raelgc\view\Template('home.html');
 
-    $tpl->NOME = $_SESSION['nome'];
-    $tpl->IP = $_SERVER['REMOTE_ADDR'] == '::1' ? '127.0.0.1' : $_SERVER['REMOTE_ADDR'];
+    $tpl->NOME = Session::get('nome');
+    $tpl->IP = Server::get('REMOTE_ADDR') == '::1' ? '127.0.0.1' : Server::get('REMOTE_ADDR');
 
     $tpl->ELEMENTO = "<script defer>document.getElementById('home').classList.add('active')</script>";
 
     $tpl->addFile('TOPO', 'topo.html');
 
-    if (isset($_SESSION['status'])) {
-        $tpl->SCRIPT = '<script defer>setTimeout(() => showSnackbar("' . $_SESSION["status"] . '"), 1);</script>';
+    if (Session::has('status')) {
+        $tpl->SCRIPT = '<script defer>setTimeout(() => showSnackbar("' . Session::get('status') . '"), 1);</script>';
 
-        unset($_SESSION['status']);
+        Session::forget('status');
     }
 
     $tpl->show();
@@ -193,8 +193,8 @@ class Usuarios extends Conexao
 
     static function mostrar()
     {
-        if (!isset($_GET['pg']) || $_GET['pg'] < 1) $pagina = 1;
-        else $pagina = $_GET['pg'];
+        if (Get::get('pg') < 1) $pagina = 1;
+        else $pagina = Get::get('pg');
 
         $usuariosQuant = self::queryUsuario('COUNT');
         $maxPagina = (int)ceil($usuariosQuant / 10);
@@ -229,10 +229,10 @@ class Usuarios extends Conexao
 
         $tpl->block('TABELA');
 
-        if (isset($_SESSION['status'])) {
-            $tpl->SCRIPT = '<script>setTimeout(() => showSnackbar("' . $_SESSION["status"] . '"), 1);</script>';
-
-            unset($_SESSION['status']);
+        if (Session::has('status')) {
+            $tpl->SCRIPT = '<script defer>setTimeout(() => showSnackbar("' . Session::get('status') . '"), 1);</script>';
+    
+            Session::forget('status');
         }
 
         $tpl->show();
@@ -249,16 +249,16 @@ class Usuarios extends Conexao
                 if (self::queryUsuario('INSERT', self::validar('usuario', Post::get('criarUsuario')) . ', ' . self::validar('nome', Post::get('criarNome')) . ', ' . self::validar('inteiro', Post::get('criarPrivilegio'), 0, 3) . ', PASSWORD(' . self::validar('senha', Post::get('criarSenha')) . ')')) {
                     Session::set('status', 'Sucesso!');
                     header('Location: ?pagina=usuarios');
-                    exit;
+                    return;
                 }
             }
         } catch (InvalidArgumentException | mysqli_sql_exception $e) {
             $tpl->SCRIPT = '<script defer>setTimeout(() => showSnackbar("' . $e->getMessage() . '"), 1);</script>';
 
-            $tpl->VALUE_USUARIO = 'value=' . $_POST['criarUsuario'];
-            $tpl->VALUE_NOME = 'value="' . $_POST['criarNome'] . '"';
-            $tpl->__set('PRIVILEGIO_' . $_POST['criarPrivilegio'], 'selected');
-            $tpl->VALUE_SENHA = 'value="' . $_POST['criarSenha'] . '"';
+            $tpl->VALUE_USUARIO = 'value=' . Post::get('criarUsuario');
+            $tpl->VALUE_NOME = 'value="' . Post::get('criarNome') . '"';
+            $tpl->__set('PRIVILEGIO_' . Post::get('criarPrivilegio'), 'selected');
+            $tpl->VALUE_SENHA = 'value="' . Post::get('criarSenha') . '"';
         }
 
         $tpl->addFile('TOPO', 'topo.html');
@@ -272,16 +272,16 @@ class Usuarios extends Conexao
 
     static function alterar()
     {
-        if (!isset($_GET['id'])) {
-            $_SESSION['status'] = 'Escolha o usuário para editar!';
+        if (!Get::has('id')) {
+            Session::set('status', 'Escolha o usuário para editar!');
             header('Location: ?pagina=usuarios');
-            exit;
+            return;
         }
 
         if (!self::queryUsuario('SELECT', 'id=' . self::escape(Get::get('id')))) {
             Session::set('status', 'Usuário não encontrado!');
             header('Location: ?pagina=usuarios');
-            exit;
+            return;
         }
 
         $resultado = self::$resultado->fetch_assoc();
@@ -298,7 +298,7 @@ class Usuarios extends Conexao
                 if (!self::queryUsuario('SELECT', 'id=' . self::escape(Post::get('editarID')))) {
                     Session::set('status', 'Usuário não encontrado!');
                     header('Location: ?pagina=usuarios');
-                    exit;
+                    return;
                 }
 
                 $resultado = self::$resultado->fetch_assoc();
@@ -314,15 +314,15 @@ class Usuarios extends Conexao
                 if (self::queryUsuario('UPDATE', 'id=' . self::escape(Post::get('editarID')), substr($query, 0, -2))) {
                     Session::set('status', 'Sucesso!');
                     header('Location: ?pagina=usuarios');
-                    exit;
+                    return;
                 }
             }
         } catch (InvalidArgumentException | mysqli_sql_exception $e) {
             $tpl->SCRIPT = '<script defer>setTimeout(() => showSnackbar("' . $e->getMessage() . '"), 1);</script>';
 
-            $tpl->NOME = $_POST['editarNome'];
-            $tpl->__set('PRIVILEGIO_' . $_POST['editarPrivilegio'], 'selected');
-            $tpl->VALUE_SENHA = 'value=' . $_POST['editarSenha'];
+            $tpl->NOME = Post::get('editarNome');
+            $tpl->__set('PRIVILEGIO_' . Post::get('editarPrivilegio'), 'selected');
+            $tpl->VALUE_SENHA = 'value=' . Post::get('editarSenha');
         }
 
         $tpl->addFile('TOPO', 'topo.html');
@@ -340,18 +340,17 @@ class Usuarios extends Conexao
             if (self::queryUsuario('SELECT', 'id=' . self::escape(Get::get('id'))) == 0) Session::set('status', 'Usuário não encontrado!');
             else Session::set('status', self::queryUsuario('DELETE', 'id=' . self::escape(Get::get('id'))) ? 'Sucesso!' : 'Falha!');
         } else {
-            $_SESSION['status'] = 'Escolha o usuário para excluir!';
+            Session::set('status', 'Escolha o usuário para excluir!');
         }
 
         header('Location: ?pagina=usuarios');
-        exit;
     }
 
     static function pesquisar()
     {
-        if (!isset($_POST['pesquisa']) || $_POST['pesquisa'] == '') {
+        if (!Post::has('pesquisa') || Post::get('pesquisa') == '') {
             header('Location: ?pagina=usuarios');
-            exit;
+            return;
         }
 
         if (is_int(Post::get('pesquisa'))) $resultado = self::queryUsuario('SELECT', 'id=' . self::escape(Post::get('pesquisa')));

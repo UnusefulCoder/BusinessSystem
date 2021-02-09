@@ -9,10 +9,10 @@ session_start([
     'cookie_samesite' => 'Lax',
 ]);
 
-if (!isset($_SESSION["id"])) {
-    if (!isset($_GET['pagina']) || $_GET['pagina'] != 'login') {
+if (!Session::has("id")) {
+    if (Get::get('pagina') != 'login') {
         header('Location: ?pagina=login');
-        exit;
+        return;
     }
 
     try {
@@ -20,25 +20,25 @@ if (!isset($_SESSION["id"])) {
             if (Usuarios::queryUsuario('SELECT', 'usuario=' . Usuarios::escape(Post::get('usuario')) . ' AND senha=PASSWORD(' . Usuarios::escape(Post::get('senha')) . ')')) {
                 $resultado = $usuarios->resultado->fetch_assoc();
 
-                $_SESSION["id"] = $resultado["id"];
-                $_SESSION["usuario"] = $resultado["usuario"];
-                $_SESSION["nome"] = $resultado["nome"];
-                $_SESSION["privilegio"] = $resultado["privilegio"];
+                Session::set("id", $resultado["id"]);
+                Session::set("usuario", $resultado["usuario"]);
+                Session::set("nome", $resultado["nome"]);
+                Session::set("privilegio", $resultado["privilegio"]);
             } else throw new InvalidArgumentException('Dados inválidos!');
         } else {
             $tpl = new \raelgc\view\Template('login.html');
             $tpl->show();
-            exit;
+            return;
         }
     } catch (InvalidArgumentException | mysqli_sql_exception $e) {
         $tpl = new \raelgc\view\Template('login.html');
         $tpl->SCRIPT = '<script>setTimeout(() => showSnackbar("' . $e->getMessage() . '"), 1);</script>';
         $tpl->show();
-        exit;
+        return;
     }
 }
 
-if (isset($_GET['pagina'])) switch ($_GET['pagina']) {
+switch (Get::get('pagina')) {
     case 'usuarios':
         Usuarios::mostrar();
         break;
@@ -62,4 +62,3 @@ if (isset($_GET['pagina'])) switch ($_GET['pagina']) {
     default:
         mostrarHome();
 }
-else mostrarHome();

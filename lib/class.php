@@ -1,6 +1,6 @@
 <?php
 
-require_once('lib/raelgc/view/Template.php');
+require_once('lib/Template.php');
 
 abstract class Conexao
 {

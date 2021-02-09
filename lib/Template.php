@@ -1,9 +1,7 @@
 <?php
 namespace raelgc\view {
 
-use function PHPSTORM_META\type;
-
-/**
+	/**
 	 * Template Management for PHP5
 	 *
 	 * The Template engine allows to keep the HTML code in some external files
@@ -234,7 +232,7 @@ use function PHPSTORM_META\type;
 		 *
 		 * @param     string $line				contains one line of the content file
 		 * @param     string $varname			contains the filename variable identifier
-		 * @param     string $queued_blocks		contains a list of the current queued blocks
+		 * @param     array  $queued_blocks		contains a list of the current queued blocks
 		 * @param     string $blocks			contains a list of all identified blocks in the current file
 		 *
 		 * @return    void
@@ -533,18 +531,16 @@ use function PHPSTORM_META\type;
 namespace {
 
 	/**
-	* Suitable for Template class: similar to str_replace, but using string in first param
-	* @see str_replace
-	* @param string $str
-	* @param string $search
-	* @param string $replace
-	* @return mixed
-	* @author Rael G.C. (rael.gc@gmail.com)
-	*/
+	 * Suitable for Template class: similar to str_replace, but using string in first param
+	 * @see str_replace
+	 * @param string $str
+	 * @param string $search
+	 * @param string $replace
+	 * @return mixed
+	 * @author Rael G.C. (rael.gc@gmail.com)
+	 */
    function replace($str, $search, $replace){
 	   return str_replace($search, $replace, $str);
    }
 
 }
-
-?>

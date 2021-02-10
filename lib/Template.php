@@ -181,11 +181,10 @@ namespace raelgc\view {
          */
         public function __get($varname)
         {
-            return (isset($this->values['{'.$varname.'}']))
-                ? $this->values['{'.$varname.'}']
-                : ((isset($this->instances[$varname]))
-                    ? $this->instances[$varname]
-                    : throw new \RuntimeException("var $varname does not exist"));
+            if (isset($this->values['{'.$varname.'}'])) return $this->values['{'.$varname.'}'];
+            if (isset($this->instances[$varname])) return $this->instances[$varname];
+
+            throw new \RuntimeException("var $varname does not exist");
         }
 
         /**
